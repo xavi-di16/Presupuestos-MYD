@@ -112,7 +112,6 @@
 
         .a4-page {
             width: 210mm;
-            /* CAMBIO: min-height en vez de height fijo para que crezca */
             min-height: 297mm; 
             height: auto; 
             background: white;
@@ -121,7 +120,7 @@
             position: relative;
             box-sizing: border-box;
             color: var(--text-color);
-            margin-bottom: 40px; /* Espacio al final al hacer scroll */
+            margin-bottom: 40px; 
         }
 
         /* --- DISEÑO DEL DOCUMENTO --- */
@@ -133,33 +132,50 @@
             margin-bottom: 20px;
         }
 
-        .header-left img {
-            max-width: 220px; 
-            max-height: 120px;
-            object-fit: contain; 
-            display: none; 
+        .header-left {
+            /* Contenedor del logo fijo */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        /* LOGO DIGITAL */
-        .digital-logo { font-family: 'Arial Black', sans-serif; line-height: 1; }
-        .digital-logo-main {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--dark);
-            letter-spacing: -2px;
-            -webkit-print-color-adjust: exact; print-color-adjust: exact;
-        }
-        .digital-logo-sub {
-            font-size: 0.75rem;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            color: var(--dark);
-            text-transform: uppercase;
-            border-top: 3px solid var(--primary);
-            padding-top: 5px;
-            margin-top: 5px;
+        /* ESTILO LOGO NEGRO Y DORADO INTEGRADO */
+        .logo-badge {
+            background-color: #000;
+            padding: 15px 25px;
+            border-radius: 8px;
             display: inline-block;
-            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            text-align: center;
+            border: 2px solid var(--primary);
+            /* Forzar impresión de fondo negro */
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important;
+        }
+
+        .logo-main {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 3rem;
+            line-height: 0.9;
+            font-weight: 900;
+            color: var(--primary); /* Dorado */
+            letter-spacing: -2px;
+            margin-bottom: 5px;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important;
+        }
+
+        .logo-sub {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.65rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #fff; /* Blanco */
+            text-transform: uppercase;
+            border-top: 1px solid var(--primary);
+            padding-top: 5px;
+            display: block;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important;
         }
 
         .header-right {
@@ -179,7 +195,7 @@
             -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
         }
 
-        /* CAMBIO: Grid en lugar de Flex para evitar errores de impresión */
+        /* Grid en lugar de Flex para evitar errores de impresión */
         .client-info-box {
             background-color: #f4f4f4;
             padding: 15px 20px;
@@ -218,7 +234,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Ajuste para que el Objeto no empuje tanto si es corto */
         #outObject { margin-bottom: 15px; }
 
         .work-item-title {
@@ -309,14 +324,6 @@
         <h2>🏗️ Datos de la Obra</h2>
         <button onclick="window.print()" class="btn btn-print">🖨️ Imprimir / PDF</button>
 
-        <div class="form-group" style="background: #eee; padding: 10px; border-radius: 5px;">
-            <label>Opciones de Logo:</label>
-            <small style="display:block; margin-bottom:5px; color:#666;">Usa el logo digital o sube imagen.</small>
-            <input type="file" id="logoInput" accept="image/*" onchange="loadLogo(event)">
-            <label style="margin-top:10px;">Tamaño de Imagen:</label>
-            <input type="range" id="logoSize" min="100" max="400" value="200" oninput="resizeLogo(this.value)">
-        </div>
-
         <div class="form-group">
             <label>N° Presupuesto y Fecha:</label>
             <div style="display:flex; gap:10px;">
@@ -374,10 +381,10 @@
             <!-- Header -->
             <header>
                 <div class="header-left">
-                    <img id="logoImg" src="" alt="Logo">
-                    <div id="digitalLogo" class="digital-logo">
-                        <div class="digital-logo-main">M&D</div>
-                        <div class="digital-logo-sub">OBRAS Y MANTENIMIENTO INTEGRAL</div>
+                    <!-- Logo "Negro y Dorado" Fijo -->
+                    <div class="logo-badge">
+                        <div class="logo-main">M&D</div>
+                        <div class="logo-sub">OBRAS Y MANTENIMIENTO INTEGRAL</div>
                     </div>
                 </div>
                 <div class="header-right">
@@ -389,7 +396,7 @@
 
             <div class="separator-line"></div>
 
-            <!-- Client Box: Ahora usa GRID para no romperse -->
+            <!-- Client Box: GRID para no romperse -->
             <div class="client-info-box">
                 <div class="client-info-col">
                     <h3>Cliente</h3>
@@ -542,23 +549,6 @@
             } else {
                 notesDiv.style.display = 'none';
             }
-        }
-
-        function loadLogo(event) {
-            const img = document.getElementById('logoImg');
-            const digitalLogo = document.getElementById('digitalLogo');
-            
-            if(event.target.files && event.target.files[0]) {
-                img.src = URL.createObjectURL(event.target.files[0]);
-                img.onload = () => URL.revokeObjectURL(img.src);
-                img.style.display = 'block';
-                digitalLogo.style.display = 'none';
-            }
-        }
-
-        function resizeLogo(val) {
-            const img = document.getElementById('logoImg');
-            img.style.maxWidth = val + 'px';
         }
 
         renderSectionsInputs();
